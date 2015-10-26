@@ -7,3 +7,10 @@ build:
   commands:
     - make deps
     - make test
+publish:
+  docker:
+    username: ipedrazas
+    password: $$DOCKER_PASSWORD
+    repo: ipedrazas/botd
+    tag: latest
+    file: Dockerfile
