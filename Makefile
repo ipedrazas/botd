@@ -6,6 +6,7 @@ deps:
 	go get github.com/gorilla/mux
 
 test:
+	go fmt ./...
 	@test -z "$(shell find . -name '*.go' | xargs gofmt -l)" || (echo "Need to run 'go fmt ./...'"; exit 1)
 	go test -cover -short ./...
 
