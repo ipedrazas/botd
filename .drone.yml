@@ -1,0 +1,7 @@
+build:
+  image: golang:1.5.1
+  environment:
+    - GOPATH=/botd
+  commands:
+    - make deps
+    - make test
