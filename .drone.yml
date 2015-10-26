@@ -10,6 +10,7 @@ build:
 publish:
   docker:
     username: ipedrazas
+    email: ipedrazas@gmail.com
     password: $$DOCKER_PASSWORD
     repo: ipedrazas/botd
     tag: latest
