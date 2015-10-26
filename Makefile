@@ -11,4 +11,4 @@ test:
 	go test -cover -short ./...
 
 build:
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o botd .
+	go build CGO_ENABLED=0 GOOS=linux -a -installsuffix cgo -o botd .
