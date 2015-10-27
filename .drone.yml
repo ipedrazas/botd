@@ -1,31 +1,18 @@
-# build:
-#   image: golang:1.5.1
-#   environment:
-#     - GO15VENDOREXPERIMENT=1
-#   environment:
-#     - GOPATH=/botd
-#   commands:
-#     - make deps
-#     - make test
-# publish:
-#   docker:
-#     username: ipedrazas
-#     email: ipedrazas@gmail.com
-#     password: $$DOCKER_PASSWORD
-#     repo: ipedrazas/botd
-#     tag: latest
-#     file: Dockerfile
-#     docker_host: tcp://drone-worker.ipedrazas.k8s.co.uk:2375
-
-
 build:
-  image: samueldebruyn/debian-git:latest
+  image: golang:1.5.1
+  environment:
+    - GO15VENDOREXPERIMENT=1
+  environment:
+    - GOPATH=/botd
   commands:
-    - apt-get update -qq
-    - apt-get install -qq build-essential gcc g++ cmake libtool git-core
-    - apt-get install -qq libace-dev libbz2-dev liblua5.2-dev libncurses5-dev libmysqlclient-dev libreadline-dev libssl-dev zlib1g-dev
-    - test -d _build || mkdir _build
-    - test -d _install || mkdir _install
-    - cd _build
-    - cmake -DCMAKE_INSTALL_PREFIX=../_install -DCMAKE_BUILD_TYPE=Release -DINSTALL_LAYOUT=DEB -DRECAST_MESHDEMO=OFF ..
-    - make -j 1
+    - make deps
+    - make test
+publish:
+  docker:
+    username: ipedrazas
+    email: ipedrazas@gmail.com
+    password: $$DOCKER_PASSWORD
+    repo: ipedrazas/botd
+    tag: latest
+    file: Dockerfile
+    docker_host: tcp://drone-worker.ipedrazas.k8s.co.uk:2375
