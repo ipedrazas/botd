@@ -15,4 +15,4 @@ publish:
     repo: ipedrazas/botd
     tag: latest
     file: Dockerfile
-    docker_host: tcp://drone-worker.ipedrazas.k8s.co.uk:2375
+    
