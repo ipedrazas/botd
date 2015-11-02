@@ -26,6 +26,6 @@ plugin:
   type: publish
   image: ipedrazas/drone-docker
   labels:
-    - docker
+    - idocker
     - image
     - container
