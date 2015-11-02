@@ -8,6 +8,16 @@ build:
     - make deps
     - make test
 
+plugin:
+  name: Docker
+  desc: Build and Publish images to a Docker registry.
+  type: publish
+  image: ipedrazas/dind
+  labels:
+    - docker
+    - image
+    - container
+
 publish:
   docker:
     username: ipedrazas
