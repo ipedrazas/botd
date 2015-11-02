@@ -7,11 +7,13 @@ build:
   commands:
     - make deps
     - make test
-publish:
-  docker:
-    username: ipedrazas
-    email: $$DOCKER_EMAIL
-    password: $$DOCKER_PASSWORD
-    repo: ipedrazas/botd
-    when:
-    branch: master
+
+plugin:
+  name: Docker
+  desc: Build and Publish images to a Docker registry.
+  type: publish
+  image: ipedrazas/dind
+  labels:
+    - docker
+    - image
+    - container
