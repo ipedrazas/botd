@@ -15,4 +15,5 @@ publish:
     email: $$DOCKER_EMAIL
     repo: ipedrazas/botd
     tag: $$CI_BUILD_NUMBER
-    file: Dockerfile
+    when:
+      branch: master
