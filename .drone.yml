@@ -9,7 +9,7 @@ build:
     - make test
 
 publish:
-  docker:
+  idocker:
     environment:
       - DOCKER_LAUNCH_DEBUG=true
     username: $$DOCKER_EMAIL
@@ -19,3 +19,13 @@ publish:
     tag: $$CI_BUILD_NUMBER
     when:
       branch: master
+
+plugin:
+  name: idocker
+  desc: Build and Publish images to a Docker registry.
+  type: publish
+  image: ipedrazas/drone-docker
+  labels:
+    - docker
+    - image
+    - container
