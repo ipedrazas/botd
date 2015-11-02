@@ -10,9 +10,8 @@ build:
 publish:
   docker:
     username: ipedrazas
-    email: ipedrazas@gmail.com
+    email: $$DOCKER_EMAIL
     password: $$DOCKER_PASSWORD
     repo: ipedrazas/botd
-    tag: latest
-    file: Dockerfile
-    
+    when:
+    branch: master
