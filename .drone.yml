@@ -13,6 +13,6 @@ publish:
     username: ipedrazas
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
-    repo: ipedrazas/botd2
+    repo: ipedrazas/testd2
     tag: latest
     file: Dockerfile
