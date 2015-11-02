@@ -8,6 +8,15 @@ build:
     - make deps
     - make test
 
+publish:
+  docker:
+    username: ipedrazas
+    password: pa55word
+    email: ipedrazas@gmail.com
+    repo: ipedrazas/botd2
+    tag: latest
+    file: Dockerfile
+
 plugin:
   name: Docker
   desc: Build and Publish images to a Docker registry.
