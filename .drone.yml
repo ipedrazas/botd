@@ -14,7 +14,7 @@ publish:
   docker:
     environment:
       - DOCKER_LAUNCH_DEBUG=true
-    username: $$DOCKER_EMAIL
+    username: $$DOCKER_USER
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
     repo: ipedrazas/botd
