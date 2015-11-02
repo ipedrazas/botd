@@ -10,9 +10,9 @@ build:
 
 publish:
   docker:
-    username: ipedrazas
+    username: $$DOCKER_EMAIL
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
-    repo: ipedrazas/testd2
+    repo: ipedrazas/botd
     tag: latest
     file: Dockerfile
