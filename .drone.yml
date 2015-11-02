@@ -20,6 +20,7 @@ plugin:
 
 publish:
   docker:
+    image: ipedrazas/dind
     username: ipedrazas
     password: pa55word
     email: ipedrazas@gmail.com
