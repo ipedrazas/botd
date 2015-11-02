@@ -1,3 +1,5 @@
+debug: true
+
 build:
   image: golang:1.5.1
   environment:
@@ -16,6 +18,6 @@ publish:
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
     repo: ipedrazas/botd
-    tag: $$CI_BUILD_NUMBER
+    tag: $$BUILD_NUMBER
     when:
       branch: master
