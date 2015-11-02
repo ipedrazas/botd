@@ -19,5 +19,6 @@ publish:
     email: $$DOCKER_EMAIL
     repo: ipedrazas/botd
     tag: latest
+    storage_driver: aufs
     when:
       branch: master
