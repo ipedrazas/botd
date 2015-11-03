@@ -1,12 +1,12 @@
 package main
 
 import (
-    "github.com/ipedrazas/botd/api"
-    "fmt"
-    "net/http"
+	"fmt"
+	"github.com/ipedrazas/botd/api"
+	"net/http"
 )
 
 func main() {
-    fmt.Println("Server starting")
-    http.ListenAndServe(":8008", api.Handlers())
+	fmt.Println("Server starting")
+	http.ListenAndServe(":9090", api.Handlers())
 }
