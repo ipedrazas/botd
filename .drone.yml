@@ -19,8 +19,8 @@ publish:
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
     repo: ipedrazas/botd
-    tag: 
+    tag:
       - latest
-      - "$BUILD_NUMBER"
+      - "$$BUILD_NUMBER"
     when:
       branch: master
