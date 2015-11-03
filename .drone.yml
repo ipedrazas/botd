@@ -24,3 +24,18 @@ publish:
       - "$$BUILD_NUMBER"
     when:
       branch: master
+
+publish:
+  docker:
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASSWORD
+    email: $$DOCKER_EMAIL
+    repo: ipedrazas/botd-k8s
+    dockerfile: Dockerfile.k8s
+    tag:
+      - latest
+      - "$$BUILD_NUMBER"
+    when:
+      branch: master

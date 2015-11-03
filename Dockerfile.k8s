@@ -1,0 +1,6 @@
+FROM scratch
+MAINTAINER Ivan Pedrazas <ipedrazas@gmail.com>
+
+ADD deploy/kubernetes /k8s
+
+
