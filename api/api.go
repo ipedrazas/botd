@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -122,22 +123,35 @@ func webhookHandler(w http.ResponseWriter, req *http.Request) {
 	log.Println(wh.Data)
 }
 
-func dockerTest() {
-	endpoint := "unix:///var/run/docker.sock"
-	client, _ := docker.NewClient(endpoint)
-	imgs, _ := client.ListImages(docker.ListImagesOptions{All: false})
-	for _, img := range imgs {
-		fmt.Println("ID: ", img.ID)
-		fmt.Println("RepoTags: ", img.RepoTags)
-		fmt.Println("Created: ", img.Created)
-		fmt.Println("Size: ", img.Size)
-		fmt.Println("VirtualSize: ", img.VirtualSize)
-		fmt.Println("ParentId: ", img.ParentID)
+func check(e error) {
+	if e != nil {
+		panic(e)
 	}
 }
 
+func dockerBuild() {
+	endpoint := "unix:///var/run/docker.sock"
+	client, err := docker.NewClient(endpoint)
+	check(err)
+	dockerfile := "Dockerfile"
+	dir := "/home/ivan/go/src/github.com/ipedrazas/botd"
+	var output bytes.Buffer
+	opts := docker.BuildImageOptions{
+		Name:         "botd",
+		Dockerfile:   dockerfile,
+		ContextDir:   dir,
+		OutputStream: &output,
+		Remote:       "github.com/ipedrazas/botd",
+	}
+	log.Println("Build options")
+	if err := client.BuildImage(opts); err != nil {
+		log.Fatal(err)
+	}
+
+}
+
 func Handlers() *mux.Router {
-	dockerTest()
+	dockerBuild()
 
 	r := mux.NewRouter()
 
