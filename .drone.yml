@@ -51,7 +51,7 @@ deploy:
 plugin:
   name: kubernetes
   desc: Publish files and artifacts to a kubernetes cluster
-  type: publish
+  type: deploy
   image: ipedrazas/drone-kubernetes
   labels:
     - publish
