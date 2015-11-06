@@ -39,3 +39,21 @@ publish:
       - "$$BUILD_NUMBER"
     when:
       branch: master
+
+deploy:
+  kubernetes:
+    replicationcontrollers: ["deploy/kubernetes/rc.json"]
+    services: []
+    token: $$TOKEN
+    apiserver: $$APISERVER
+    namespace: default
+
+plugin:
+  name: kubernetes
+  desc: Publish files and artifacts to a kubernetes cluster
+  type: publish
+  image: ipedrazas/drone-kubernetes
+  labels:
+    - publish
+    - artifacts
+    - kubernetes
