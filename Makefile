@@ -5,6 +5,7 @@ all: build
 deps:
 	go get github.com/gorilla/mux
 	go get github.com/fsouza/go-dockerclient
+	go get gopkg.in/redis.v3
 
 test:
 	go test api/api_test.go

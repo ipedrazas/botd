@@ -1,100 +1,35 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
-	"fmt"
-	"github.com/fsouza/go-dockerclient"
+	// "os"
+	// "errors"
+	// "fmt
+	// "github.com/fsouza/go-dockerclient"
 	"github.com/gorilla/mux"
+	"gopkg.in/redis.v3"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-type WebhookJson struct {
-	pushed    uint64 `json:pushed_at`
-	pusher    string `json:pusher`
-	name      string `json:name`
-	namespace string `json:namespace`
-}
-
-type App struct {
-	Id      uint32 `json:"id"`
-	Appname string `json:"name"`
-	Apptype string `json:"type"`
-}
-
-type AppParams struct {
-	Appname string `json:"name"`
-	Apptype string `json:"type"`
-}
-
 type Version struct {
 	Apiversion string `json: version`
 }
 
-var appIdCounter uint32 = 0
-
-var appStore = []App{}
-
-func createAppHandler(w http.ResponseWriter, r *http.Request) {
-	p := AppParams{}
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = json.Unmarshal(body, &p)
-	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = validateUniqueness(p.Appname)
-
-	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	a := App{
-		Id:      appIdCounter,
-		Appname: p.Appname,
-		Apptype: p.Apptype,
-	}
-
-	appStore = append(appStore, a)
-
-	appIdCounter += 1
-
-	w.WriteHeader(http.StatusCreated)
+type Repository struct {
+	Name      string `json: name`
+	Namespace string `json: namespace`
 }
 
-func validateUniqueness(appname string) error {
-	for _, a := range appStore {
-		if a.Appname == appname {
-			return errors.New("Appname is already used")
-		}
-	}
-
-	return nil
+type Data struct {
+	Pushed float64 `json:"pushed_at,string"`
+	Pusher string  `json: pusher`
 }
 
-func listAppsHandler(w http.ResponseWriter, r *http.Request) {
-	apps, err := json.Marshal(appStore)
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(apps)
+type WebhookJson struct {
+	PushData Data       `json:"push_data"`
+	Repo     Repository `json:"repository"`
 }
 
 func versionHandler(w http.ResponseWriter, req *http.Request) {
@@ -112,21 +47,58 @@ func versionHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write(version)
 }
 
+func hooksHandler(w http.ResponseWriter, req *http.Request) {
+	hooks := getHooks(redisClient)
+
+	shooks := "{["
+	for i := 0; i < len(hooks); i++ {
+		if i > 0 {
+			shooks = shooks + ", "
+		}
+		shooks = shooks + hooks[i]
+	}
+	shooks = shooks + "]}"
+
+	jhooks, err := json.Marshal(hooks)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jhooks)
+
+}
+
 func webhookHandler(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		panic(err)
 	}
 	log.Println(string(body))
-	var wh WebhookJson
-	err = json.Unmarshal(body, &wh)
+
+	key, err := setHook(redisClient, string(body))
+
 	if err != nil {
 		panic(err)
 	}
-	log.Println(wh.name)
-	log.Println(wh.namespace)
-	log.Println(wh.pusher)
-	log.Println(wh.pushed)
+
+	log.Println(key)
+	log.Println("...h")
+
+	// var wh WebhookJson
+	// err = json.Unmarshal([]byte(body), &wh)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// repo := wh.Repo
+	// data := wh.PushData
+	// log.Println("")
+	// log.Println(repo.Name)
+	// log.Println(repo.Namespace)
+	// log.Println(data.Pusher)
+	// log.Println(data.Pushed)
 }
 
 func check(e error) {
@@ -135,35 +107,49 @@ func check(e error) {
 	}
 }
 
-func dockerBuild() {
-	endpoint := "unix:///var/run/docker.sock"
-	client, err := docker.NewClient(endpoint)
-	check(err)
-	dockerfile := "Dockerfile"
-	dir := "/home/ivan/go/src/github.com/ipedrazas/botd"
-	var output bytes.Buffer
-	opts := docker.BuildImageOptions{
-		Name:         "botd",
-		Dockerfile:   dockerfile,
-		ContextDir:   dir,
-		OutputStream: &output,
-		Remote:       "github.com/ipedrazas/botd",
-	}
-	log.Println("Build options")
-	if err := client.BuildImage(opts); err != nil {
-		log.Fatal(err)
-	}
+// func dockerBuild() {
+// 	endpoint := "unix:///var/run/docker.sock"
+// 	client, err := docker.NewClient(endpoint)
+// 	check(err)
+// 	dockerfile := "Dockerfile"
+// 	dir := "/home/ivan/go/src/github.com/ipedrazas/botd"
+// 	var output bytes.Buffer
+// 	opts := docker.BuildImageOptions{
+// 		Name:         "botd",
+// 		Dockerfile:   dockerfile,
+// 		ContextDir:   dir,
+// 		OutputStream: &output,
+// 		Remote:       "github.com/ipedrazas/botd",
+// 	}
+// 	log.Println("Build options")
+// 	if err := client.BuildImage(opts); err != nil {
+// 		log.Fatal(err)
+// 	}
 
+// }
+
+var redisClient *Redis
+
+type Redis struct {
+	*redis.Client
 }
 
 func Handlers() *mux.Router {
-	dockerBuild()
+	// dockerBuild()
+
+	redisClient = &Redis{
+		redis.NewClient(&redis.Options{
+			Addr:     "redis:6379",
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		}),
+	}
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/apps", createAppHandler).Methods("POST")
 	r.HandleFunc("/botd", webhookHandler).Methods("POST")
-	r.HandleFunc("/apps", listAppsHandler).Methods("GET")
+	r.HandleFunc("/hooks", hooksHandler).Methods("GET")
+	r.HandleFunc("/hooks", webhookHandler).Methods("POST")
 	r.HandleFunc("/version", versionHandler).Methods("GET")
 
 	return r
