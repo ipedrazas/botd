@@ -25,35 +25,36 @@ publish:
     when:
       branch: master
 
-publish:
-  docker:
-    environment:
-      - DOCKER_LAUNCH_DEBUG=true
-    username: $$DOCKER_USER
-    password: $$DOCKER_PASSWORD
-    email: $$DOCKER_EMAIL
-    repo: ipedrazas/botd-k8s
-    dockerfile: Dockerfile.k8s
-    tag:
-      - latest
-      - "$$BUILD_NUMBER"
-    when:
-      branch: master
+# publish:
+#   docker:
+#     environment:
+#       - DOCKER_LAUNCH_DEBUG=true
+#     username: $$DOCKER_USER
+#     password: $$DOCKER_PASSWORD
+#     email: $$DOCKER_EMAIL
+#     repo: ipedrazas/botd-k8s
+#     dockerfile: Dockerfile.k8s
+#     tag:
+#       - latest
+#       - "$$BUILD_NUMBER"
+#     when:
+#       branch: master
 
 deploy:
   kubernetes:
+    image: ipedrazas/drone-kubernetes
     replicationcontrollers: ["deploy/kubernetes/rc.json"]
     services: []
     token: $$TOKEN
     apiserver: $$APISERVER
     namespace: default
 
-plugin:
-  name: kubernetes
-  desc: Publish files and artifacts to a kubernetes cluster
-  type: deploy
-  image: ipedrazas/drone-kubernetes
-  labels:
-    - deploy
-    - artifacts
-    - kubernetes
+# plugin:
+#   name: kubernetes
+#   desc: Publish files and artifacts to a kubernetes cluster
+#   type: deploy
+#   image: ipedrazas/drone-kubernetes
+#   labels:
+#     - deploy
+#     - artifacts
+#     - kubernetes
