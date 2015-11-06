@@ -13,7 +13,7 @@
       "metadata": {
         "name": "botdrc",
         "labels": {
-          "name": "botdc"
+          "name": "botrc"
         }
       },
       "spec": {
@@ -21,7 +21,7 @@
           {
             "name": "botd",
             "image": "ipedrazas/botd:latest",
-            "ports": ["9090"]
+            "ports": [9090]
           }
         ]
       }
