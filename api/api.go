@@ -13,7 +13,10 @@ import (
 )
 
 type WebhookJson struct {
-	Data string
+	pushed    uint64 `json:pushed_at`
+	pusher    string `json:pusher`
+	name      string `json:name`
+	namespace string `json:namespace`
 }
 
 type App struct {
@@ -120,7 +123,10 @@ func webhookHandler(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println(wh.Data)
+	log.Println(wh.name)
+	log.Println(wh.namespace)
+	log.Println(wh.pusher)
+	log.Println(wh.pushed)
 }
 
 func check(e error) {

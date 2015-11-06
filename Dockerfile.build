@@ -1,0 +1,15 @@
+FROM golang:1.5.1
+
+# Configure Go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
+
+RUN mkdir -p ${GOPATH}/{src,bin}
+
+WORKDIR /go
+
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+
+CMD ["go", "build",  "-a", "-installsuffix", "cgo", "-o", "botd", "."]
