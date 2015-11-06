@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/ipedrazas/botd/api"
 	"io"
-	"net/http"
+	// "net/http"
 	"net/http/httptest"
-	"strings"
+	// "strings"
 	"testing"
 )
 
