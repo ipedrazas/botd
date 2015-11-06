@@ -54,6 +54,6 @@ plugin:
   type: deploy
   image: ipedrazas/drone-kubernetes
   labels:
-    - publish
+    - deploy
     - artifacts
     - kubernetes
