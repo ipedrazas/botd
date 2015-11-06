@@ -21,7 +21,12 @@
           {
             "name": "botd",
             "image": "ipedrazas/botd:latest",
-            "ports": [9090]
+           "ports":[
+                     {
+                        "containerPort":9090,
+                        "protocol":"TCP"
+                     }
+                  ]
           }
         ]
       }
