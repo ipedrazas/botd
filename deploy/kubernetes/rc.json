@@ -23,7 +23,7 @@
             "image": "ipedrazas/botd:latest",
            "ports":[
                      {
-                        "containerPort":9090,
+                        "containerPort": 9090,
                         "protocol":"TCP"
                      }
                   ]
