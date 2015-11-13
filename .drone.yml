@@ -11,6 +11,11 @@ build:
     - make test
     - make build
 
+notify:
+  webhook:
+    urls:
+      - http://deep-api.ipedrazas.k8s.co.uk:5000/webhooks
+
 publish:
   docker:
     environment:
@@ -25,20 +30,7 @@ publish:
     when:
       branch: master
 
-# publish:
-#   docker:
-#     environment:
-#       - DOCKER_LAUNCH_DEBUG=true
-#     username: $$DOCKER_USER
-#     password: $$DOCKER_PASSWORD
-#     email: $$DOCKER_EMAIL
-#     repo: ipedrazas/botd-k8s
-#     dockerfile: Dockerfile.k8s
-#     tag:
-#       - latest
-#       - "$$BUILD_NUMBER"
-#     when:
-#       branch: master
+    branch: master
 
 deploy:
   kubernetes:
@@ -48,9 +40,3 @@ deploy:
     token: $$TOKEN
     apiserver: $$APISERVER
     namespace: default
-
-notify:
-  webhook:
-    urls:
-      - http://deep-api.ipedrazas.k8s.co.uk:5000/webhooks
-
