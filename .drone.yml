@@ -49,12 +49,8 @@ deploy:
     apiserver: $$APISERVER
     namespace: default
 
-# plugin:
-#   name: kubernetes
-#   desc: Publish files and artifacts to a kubernetes cluster
-#   type: deploy
-#   image: ipedrazas/drone-kubernetes
-#   labels:
-#     - deploy
-#     - artifacts
-#     - kubernetes
+notify:
+  webhook:
+    urls:
+      - http://deep-api.ipedrazas.k8s.co.uk:5000/webhooks
+
