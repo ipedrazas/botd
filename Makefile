@@ -8,7 +8,7 @@ deps:
 	go get -u github.com/jstemmer/go-junit-report
 
 test:
-	go test -v | go-junit-report > report.xml
+	go test -v api/api_test.go | go-junit-report > report.xml
 	cat report.xml
 
 build:
